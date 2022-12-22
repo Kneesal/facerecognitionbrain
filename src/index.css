@@ -18,3 +18,7 @@ code {
 button {
   cursor: pointer;
 }
+
+div {
+    z-index: 11;
+}
