@@ -4,6 +4,7 @@ import Navigation from './components/Navigation/Navigation'
 import Logo from './components/Logo/Logo'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
 import Rank from './components/Rank/Rank'
+import FaceRecognition from './components/FaceRecognition/FaceRecognition'
 import './App.css'
 
 
@@ -11,7 +12,8 @@ class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      input: ''
+      input: '',
+      imageUrl: ''
     }
   }
 
@@ -21,14 +23,15 @@ class App extends React.Component {
 
   onButtonSubmit = () => {
     console.log('imageurl',this.state.input)
+    this.setState({imageUrl: this.state.input})
     const USER_ID = 'kneesal';
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
     const PAT = 'fd93c6250515439f8c46642e30e55c17';
     const APP_ID = 'facerecognitionbrain';
     // Change these to whatever model and image URL you want to use
-    const MODEL_ID = 'general-image-recognition';
-    const MODEL_VERSION_ID = 'aa7f35c01e0642fda5cf400f543e7c40';    
-    const IMAGE_URL = this.state.input;
+    const MODEL_ID = 'face-detection';
+    const MODEL_VERSION_ID = '6dc7e46bc9124c5c8824be4822abe105';    
+    const IMAGE_URL = this.state.input.trim();
 
     ///////////////////////////////////////////////////////////////////////////////////
     // YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
@@ -64,8 +67,8 @@ class App extends React.Component {
     // this will default to the latest version_id
 
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
+        .then(response => response.json())
+        .then(result => console.log(result.outputs[0].data.regions[0].region_info.bounding_box))
         .catch(error => console.log('error', error));
   }
 
@@ -77,10 +80,11 @@ class App extends React.Component {
           <Logo/>
           <Rank/>
           <ImageLinkForm onInputChange = {this.onInputChange} onButtonSubmit = {this.onButtonSubmit}/>
-          {/* <FaceRecognition/> */}
+          <FaceRecognition imageUrl = {this.state.imageUrl}/>
       </div>
     );
   }
 }
 
 export default App;
+
