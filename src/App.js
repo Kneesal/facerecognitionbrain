@@ -33,7 +33,6 @@ class App extends React.Component {
 
   displayFaceBox = (box) => {
     this.setState({box: box});
-    console.log(box)
   }
 
   onInputChange = (e) => {
@@ -86,7 +85,9 @@ class App extends React.Component {
 
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
         .then(response => response.json())
-        .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
+        .then(result => 
+           { console.log(result) //console.log results for future
+            return this.displayFaceBox(this.calculateFaceLocation(result))})
         .catch(error => console.log('error', error));
   }
 
