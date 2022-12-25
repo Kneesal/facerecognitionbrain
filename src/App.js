@@ -13,8 +13,27 @@ class App extends React.Component {
     super();
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {}
     }
+  }
+
+  calculateFaceLocation = (data) => {
+   const clarifaiFace =  data.outputs[0].data.regions[0].region_info.bounding_box; //gets the output bounding box, bounding box is a percentage of the image
+   const image = document.getElementById('inputimage'); //get the image and cache it
+   const width = Number(image.width); //get the image height and width
+   const height = Number(image.height);
+   return {
+    leftCol: clarifaiFace.left_col * width, //since bounding box is a percentage o
+    topRow: clarifaiFace.top_row * height,
+    rightCol: width - (clarifaiFace.right_col * width),
+    bottomRow: height - (clarifaiFace.bottom_row * height) 
+   }
+  }
+
+  displayFaceBox = (box) => {
+    this.setState({box: box});
+    console.log(box)
   }
 
   onInputChange = (e) => {
@@ -22,7 +41,6 @@ class App extends React.Component {
   }
 
   onButtonSubmit = () => {
-    console.log('imageurl',this.state.input)
     this.setState({imageUrl: this.state.input})
     const USER_ID = 'kneesal';
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
@@ -68,7 +86,7 @@ class App extends React.Component {
 
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
         .then(response => response.json())
-        .then(result => console.log(result.outputs[0].data.regions[0].region_info.bounding_box))
+        .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
         .catch(error => console.log('error', error));
   }
 
@@ -80,7 +98,7 @@ class App extends React.Component {
           <Logo/>
           <Rank/>
           <ImageLinkForm onInputChange = {this.onInputChange} onButtonSubmit = {this.onButtonSubmit}/>
-          <FaceRecognition imageUrl = {this.state.imageUrl}/>
+          <FaceRecognition imageUrl = {this.state.imageUrl} box = {this.state.box}/>
       </div>
     );
   }
