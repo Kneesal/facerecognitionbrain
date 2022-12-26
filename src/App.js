@@ -17,7 +17,8 @@ class App extends React.Component {
       input: '',
       imageUrl: '',
       box: {},
-      route: 'signin'
+      route: 'signin',
+      isSignedIn: false
     }
   }
 
@@ -95,6 +96,11 @@ class App extends React.Component {
   }
 
   onRouteChange = (setRoute) => {
+    if (setRoute === 'signout'){
+      this.setState({isSignedIn: false})
+    } else if(setRoute === 'home') {
+      this.setState({isSignedIn: true})
+    }
     this.setState({route: setRoute});
   }
 
@@ -102,7 +108,7 @@ class App extends React.Component {
     return (
       <div className="App">
           <ParticlesBg type="cobweb" num={200} bg={(true)} color = "#222426"/>
-          <Navigation onRouteChange={this.onRouteChange}/>
+          <Navigation onRouteChange = {this.onRouteChange} isSignedIn = {this.state.isSignedIn}/>
           { this.state.route === 'home' ? 
           (
           <div>
@@ -112,7 +118,7 @@ class App extends React.Component {
               <FaceRecognition imageUrl = {this.state.imageUrl} box = {this.state.box} />
           </div>
           )
-          : this.state.route === 'signin' ? <SignIn onRouteChange = {this.onRouteChange}/> : <Register onRouteChange = {this.onRouteChange}/>
+          : this.state.route === 'signin' || this.state.route === 'signout' ? <SignIn onRouteChange = {this.onRouteChange}/> : <Register onRouteChange = {this.onRouteChange}/>
     }
       </div>
     );
