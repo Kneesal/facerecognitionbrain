@@ -97,7 +97,7 @@ class App extends React.Component {
 
   onRouteChange = (setRoute) => {
     if (setRoute === 'signout'){
-      this.setState({isSignedIn: false, imageUrl: ''})
+      this.setState({isSignedIn: false, imageUrl: '', input: ''})
     } else if(setRoute === 'home') {
       this.setState({isSignedIn: true})
     }
