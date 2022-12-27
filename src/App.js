@@ -97,7 +97,7 @@ class App extends React.Component {
 
   onRouteChange = (setRoute) => {
     if (setRoute === 'signout'){
-      this.setState({isSignedIn: false})
+      this.setState({isSignedIn: false, imageUrl: ''})
     } else if(setRoute === 'home') {
       this.setState({isSignedIn: true})
     }
@@ -107,7 +107,7 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-          <ParticlesBg type="cobweb" num={200} bg={(true)} color = "#222426"/>
+          <ParticlesBg type="cobweb" num={300} bg={(true)} color = "#222426"/>
           <Navigation onRouteChange = {this.onRouteChange} isSignedIn = {this.state.isSignedIn}/>
           { this.state.route === 'home' ? 
           (
