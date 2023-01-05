@@ -2,23 +2,33 @@ import React, { useState } from "react";
 
 const SignIn = ({ onRouteChange }) => {
   const [signinemail, setSignInEmail] = useState('');
-  const [signinpassword, setSignInPassword] = useState('')
+  const [signinpassword, setSignInPassword] = useState('');
 
   const onEmailChange = (event) => {
     event.preventDefault()
     setSignInEmail(event.target.value)
-    console.log(signinemail)
   }
 
   const onPasswordChange = (event) => {
     event.preventDefault()
     setSignInPassword(event.target.value)
-    console.log(signinpassword)
   }
 
   const onSubmitSignIn = () => {
-    console.log(signinemail, signinpassword)
-    onRouteChange("home")
+    fetch('http://localhost:3000/signin', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: signinemail,
+        password: signinpassword
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data === 'success'){
+        onRouteChange("home");
+      }
+    })
   }
 
 
