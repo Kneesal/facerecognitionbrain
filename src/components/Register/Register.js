@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Register = ({ onRouteChange }) => {
+const Register = ({ onRouteChange, loadUser }) => {
   const [registername, setRegisterName] = useState("")
   const [registeremail, setRegisterEmail] = useState("");
   const [registerpassword, setRegisterPassword] = useState("");
@@ -21,8 +21,9 @@ const Register = ({ onRouteChange }) => {
   };
 
   const onSubmitRegister = () => {
-    fetch('http://localhost:3000/register', {
-      method: 'put',
+   return registername && registeremail && registerpassword ? 
+    (fetch('http://localhost:3000/register', {
+      method: 'post',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         name: registername,
@@ -33,9 +34,10 @@ const Register = ({ onRouteChange }) => {
     .then(res => res.json())
     .then(user => {
       if(user){
+        loadUser(user);
         onRouteChange("home");
       }
-    })
+    })) : null
   }
 
   return (

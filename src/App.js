@@ -42,6 +42,16 @@ class App extends React.Component {
    }
   }
 
+  loadUser = (data) => {
+    this.setState({user: { 
+      id: data.id, 
+      name: data.name, 
+      email: data.email, 
+      entries: data.entries, 
+      joined: data.joined
+    }})
+  }
+
   displayFaceBox = (box) => {
     this.setState({box: box});
   }
@@ -114,7 +124,7 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-          <ParticlesBg type="cobweb" num={300} bg={(true)} color = "#222426"/>
+          <ParticlesBg type="cobweb" num={150} bg={(true)} color = "#222426"/>
           <Navigation onRouteChange = {this.onRouteChange} isSignedIn = {this.state.isSignedIn}/>
           { this.state.route === 'home' ? 
           (
@@ -125,7 +135,7 @@ class App extends React.Component {
               <FaceRecognition imageUrl = {this.state.imageUrl} box = {this.state.box} />
           </div>
           )
-          : this.state.route === 'signin' || this.state.route === 'signout' ? <SignIn onRouteChange = {this.onRouteChange}/> : <Register onRouteChange = {this.onRouteChange}/>
+          : this.state.route === 'signin' || this.state.route === 'signout' ? <SignIn onRouteChange = {this.onRouteChange}/> : <Register onRouteChange = {this.onRouteChange} loadUser = {this.loadUser}/>
     }
       </div>
     );
