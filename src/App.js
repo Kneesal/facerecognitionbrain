@@ -62,7 +62,7 @@ class App extends React.Component {
     this.setState({ input: e.target.value });
   };
 
-  onButtonSubmit = () => {
+  onPictureSubmit = () => {
     this.setState({ imageUrl: this.state.input });
     const USER_ID = "kneesal";
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
@@ -117,6 +117,17 @@ class App extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         console.log(result); //console.log results for future
+        if(result){
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+          .then(res => res.json())
+          .then(count => this.setState(Object.assign(this.state.user, {entries: count})))
+        }
         return this.displayFaceBox(this.calculateFaceLocation(result));
       })
       .catch((error) => console.log("error", error));
@@ -148,7 +159,7 @@ class App extends React.Component {
             />
             <ImageLinkForm
               onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
+              onPictureSubmit={this.onPictureSubmit}
             />
             <FaceRecognition
               imageUrl={this.state.imageUrl}
