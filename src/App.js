@@ -15,7 +15,7 @@ class App extends React.Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {},
+      box: [],
       route: "signin",
       isSignedIn: false,
       user: {
@@ -41,17 +41,21 @@ class App extends React.Component {
   };
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box; //gets the output bounding box, bounding box is a percentage of the image
     const image = document.getElementById("inputimage"); //get the image and cache it
     const width = Number(image.width); //get the image height and width
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width, //since bounding box is a percentage o
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height,
-    };
+    let boxData = [];
+    data.outputs[0].data.regions.forEach(region => {
+      const clarifaiFaceData =
+      region.region_info.bounding_box;
+        boxData.push({
+        leftCol: clarifaiFaceData.left_col * width, //since bounding box is a percentage o
+        topRow: clarifaiFaceData.top_row * height,
+        rightCol: width - clarifaiFaceData.right_col * width,
+        bottomRow: height - clarifaiFaceData.bottom_row * height,
+      })
+    });
+    return boxData
   };
 
   displayFaceBox = (box) => {
@@ -116,7 +120,6 @@ class App extends React.Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result); //console.log results for future
         if(result){
           fetch('http://localhost:3000/image', {
             method: 'put',

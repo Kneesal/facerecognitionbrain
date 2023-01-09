@@ -1,38 +1,36 @@
 import React, { useState } from "react";
 
 const SignIn = ({ onRouteChange, loadUser }) => {
-  const [signinemail, setSignInEmail] = useState('');
-  const [signinpassword, setSignInPassword] = useState('');
+  const [signinemail, setSignInEmail] = useState("");
+  const [signinpassword, setSignInPassword] = useState("");
 
   const onEmailChange = (event) => {
-    event.preventDefault()
-    setSignInEmail(event.target.value)
-  }
+    event.preventDefault();
+    setSignInEmail(event.target.value);
+  };
 
   const onPasswordChange = (event) => {
-    event.preventDefault()
-    setSignInPassword(event.target.value)
-  }
+    event.preventDefault();
+    setSignInPassword(event.target.value);
+  };
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
+    fetch("http://localhost:3000/signin", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: signinemail,
-        password: signinpassword
-      })
+        password: signinpassword,
+      }),
     })
-    .then(res => res.json())
-    .then(data => {
-      if(data.id){
-        loadUser(data)
-        onRouteChange("home");
-      }
-    })
-  }
-
-
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.id) {
+          loadUser(data);
+          onRouteChange("home");
+        }
+      });
+  };
 
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">

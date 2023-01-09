@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 const Register = ({ onRouteChange, loadUser }) => {
-  const [registername, setRegisterName] = useState("")
+  const [registername, setRegisterName] = useState("");
   const [registeremail, setRegisterEmail] = useState("");
   const [registerpassword, setRegisterPassword] = useState("");
 
   const onNameChange = (event) => {
     event.preventDefault();
-    setRegisterName(event.target.value)
-  }
+    setRegisterName(event.target.value);
+  };
 
   const onEmailChange = (event) => {
     event.preventDefault();
@@ -21,24 +21,25 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitRegister = () => {
-   return registername && registeremail && registerpassword ? 
-    (fetch('http://localhost:3000/register', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name: registername,
-        email: registeremail,
-        password: registerpassword
-      })
-    })
-    .then(res => res.json())
-    .then(user => {
-      if(user){
-        loadUser(user);
-        onRouteChange("home");
-      }
-    })) : null
-  }
+    return registername && registeremail && registerpassword
+      ? fetch("http://localhost:3000/register", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: registername,
+            email: registeremail,
+            password: registerpassword,
+          }),
+        })
+          .then((res) => res.json())
+          .then((user) => {
+            if (user) {
+              loadUser(user);
+              onRouteChange("home");
+            }
+          })
+      : null;
+  };
 
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
