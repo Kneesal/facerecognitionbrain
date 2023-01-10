@@ -21,8 +21,8 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitRegister = () => {
-    return registername && registeremail && registerpassword
-      ? fetch("http://localhost:3000/register", {
+    return registername && registeremail && registerpassword // conditional to check if required fields are filled
+      ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -34,11 +34,11 @@ const Register = ({ onRouteChange, loadUser }) => {
           .then((res) => res.json())
           .then((user) => {
             if (user) {
-              loadUser(user);
-              onRouteChange("home");
+              loadUser(user); //pass userdata to props to render in home
+              onRouteChange("home"); //send route to home
             }
           })
-      : null;
+      : null; //else null
   };
 
   return (

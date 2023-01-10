@@ -41,15 +41,15 @@ class App extends React.Component {
   };
 
   calculateFaceLocation = (data) => {
-    const image = document.getElementById("inputimage"); //get the image and cache it
-    const width = Number(image.width); //get the image height and width
+    const image = document.getElementById("inputimage"); //get the image and cache it // we use rendered image becauase the uploaded image is different width & heigth than rendered image
+    const width = Number(image.width); //get the rendered image height and width
     const height = Number(image.height);
     let boxData = [];
     data.outputs[0].data.regions.forEach(region => {
       const clarifaiFaceData =
       region.region_info.bounding_box;
         boxData.push({
-        leftCol: clarifaiFaceData.left_col * width, //since bounding box is a percentage o
+        leftCol: clarifaiFaceData.left_col * width, //since bounding box is a percentage of image
         topRow: clarifaiFaceData.top_row * height,
         rightCol: width - clarifaiFaceData.right_col * width,
         bottomRow: height - clarifaiFaceData.bottom_row * height,
