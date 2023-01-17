@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SignIn = ({ onRouteChange, loadUser }) => {
+const SignIn = ({ onRouteChange, loadUser, updateIncorrectSignIn, incorrectSignIn, updateSignIn}) => {
   const [signinemail, setSignInEmail] = useState("");
   const [signinpassword, setSignInPassword] = useState("");
 
@@ -15,6 +15,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignIn = () => {
+    updateSignIn()
     fetch("http://localhost:3000/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -28,16 +29,20 @@ const SignIn = ({ onRouteChange, loadUser }) => {
         if (data.id) {
           loadUser(data);
           onRouteChange("home");
+        } 
+        else {
+          console.log(data)
+          updateIncorrectSignIn()
         }
-      });
+      })
   };
-
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
         <div className="measure">
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
             <legend className="f1 fw6 ph0 mh0">Sign In</legend>
+            <p>{incorrectSignIn ? 'incorrect user or password!' : ''}</p>
             <div className="mt3">
               <label className="db fw6 lh-copy f6" htmlFor="email-address">
                 Email

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Register = ({ onRouteChange, loadUser }) => {
+const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
   const [registername, setRegisterName] = useState("");
   const [registeremail, setRegisterEmail] = useState("");
   const [registerpassword, setRegisterPassword] = useState("");
@@ -21,6 +21,7 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitRegister = () => {
+    updateSignIn()
     return registername && registeremail && registerpassword // conditional to check if required fields are filled
       ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
           method: "post",
