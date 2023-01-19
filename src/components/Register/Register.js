@@ -21,7 +21,7 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
   };
 
   const onSubmitRegister = () => {
-    updateSignIn()
+    updateSignIn(true)
     return registername && registeremail && registerpassword // conditional to check if required fields are filled
       ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
           method: "post",

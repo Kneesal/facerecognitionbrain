@@ -1,6 +1,8 @@
+html {
+  height: 100%;
+}
+
 body {
-  margin: 0;
-  height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -8,6 +10,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(309deg, #00DBDE 0%, #FC00FF 100%);
   font-family: 'Courier New', Courier, monospace;
+
+  /* position: absolute; */
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
 }
 
 code {
@@ -19,6 +29,4 @@ button {
   cursor: pointer;
 }
 
-div {
-    z-index: 11;
-}
+

@@ -25,21 +25,19 @@ class App extends React.Component {
         entries: 0,
         joined: "",
       },
-      incorrectSignIn: false
+      incorrectSignIn: false,
     };
   }
 
-  updateIncorrectSignIn = () => {
-    this.setState({
-      incorrectSignIn: true
-    })
-  }
-
-  updateSignIn = () => {
-    this.setState({
-      incorrectSignIn: false
-    })
-  }
+  updateSignIn = (signin) => {
+    return signin
+      ? this.setState({
+          incorrectSignIn: false,
+        })
+      : this.setState({
+          incorrectSignIn: true,
+        });
+  };
 
   loadUser = (data) => {
     this.setState({
@@ -58,17 +56,16 @@ class App extends React.Component {
     const width = Number(image.width); //get the rendered image height and width
     const height = Number(image.height);
     let boxData = [];
-    data.outputs[0].data.regions.forEach(region => {
-      const clarifaiFaceData =
-      region.region_info.bounding_box;
-        boxData.push({
+    data.outputs[0].data.regions.forEach((region) => {
+      const clarifaiFaceData = region.region_info.bounding_box;
+      boxData.push({
         leftCol: clarifaiFaceData.left_col * width, //since bounding box is a percentage of image
         topRow: clarifaiFaceData.top_row * height,
         rightCol: width - clarifaiFaceData.right_col * width,
         bottomRow: height - clarifaiFaceData.bottom_row * height,
-      })
+      });
     });
-    return boxData
+    return boxData;
   };
 
   displayFaceBox = (box) => {
@@ -133,16 +130,19 @@ class App extends React.Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        if(result){
-          fetch('http://localhost:3000/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
+        if (result) {
+          fetch("http://localhost:3000/image", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id: this.state.user.id
-            })
+              id: this.state.user.id,
+            }),
           })
-          .then(res => res.json())
-          .then(count => this.setState(Object.assign(this.state.user, {entries: count})))
+            .then((res) => res.json())
+            .then((count) =>
+              this.setState(Object.assign(this.state.user, { entries: count }))
+            )
+            .catch(console.log)
         }
         return this.displayFaceBox(this.calculateFaceLocation(result));
       })
@@ -151,7 +151,7 @@ class App extends React.Component {
 
   onRouteChange = (setRoute) => {
     if (setRoute === "signout") {
-      this.setState({ isSignedIn: false, imageUrl: "", input: "" });
+      this.setState({ isSignedIn: false, imageUrl: "", input: ""});
     } else if (setRoute === "home") {
       this.setState({ isSignedIn: true });
     }
@@ -161,7 +161,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <ParticlesBg type="cobweb" num={150} bg={true} color="#222426" />
+        <ParticlesBg type="cobweb" num={150} bg={true} color="#222426"/>
         <Navigation
           onRouteChange={this.onRouteChange} //function that changes route
           isSignedIn={this.state.isSignedIn} //pass this boolen to conditionally render contents of NavBar
@@ -170,8 +170,8 @@ class App extends React.Component {
           <div>
             <Logo />
             <Rank
-              userName = {this.state.user.name}
-              userEntries = {this.state.user.entries}
+              userName={this.state.user.name}
+              userEntries={this.state.user.entries}
             />
             <ImageLinkForm
               onInputChange={this.onInputChange}
@@ -183,12 +183,11 @@ class App extends React.Component {
             />
           </div>
         ) : this.state.route === "signin" || this.state.route === "signout" ? (
-          <SignIn 
-          onRouteChange={this.onRouteChange}
-          loadUser={this.loadUser}
-          updateIncorrectSignIn={this.updateIncorrectSignIn}
-          incorrectSignIn={this.state.incorrectSignIn}
-          updateSignIn={this.updateSignIn}
+          <SignIn
+            onRouteChange={this.onRouteChange}
+            loadUser={this.loadUser}
+            incorrectSignIn={this.state.incorrectSignIn}
+            updateSignIn={this.updateSignIn}
           />
         ) : (
           <Register
