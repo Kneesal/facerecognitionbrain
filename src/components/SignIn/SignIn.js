@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
-const SignIn = ({ onRouteChange, loadUser }) => {
+const SignIn = ({ onRouteChange, loadUser, incorrectSignIn, updateSignIn}) => {
   const [signinemail, setSignInEmail] = useState("");
   const [signinpassword, setSignInPassword] = useState("");
+  const [failedtofetch, setFailedToFetch] = useState(false);
 
   const onEmailChange = (event) => {
     event.preventDefault();
@@ -15,6 +16,7 @@ const SignIn = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignIn = () => {
+    updateSignIn(true)
     fetch("http://localhost:3000/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -24,20 +26,30 @@ const SignIn = ({ onRouteChange, loadUser }) => {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        if (data.id) {
-          loadUser(data);
+      .then((user) => {
+        if (user.id) {
+          loadUser(user);
           onRouteChange("home");
+          setFailedToFetch(false)
+        } 
+        else {
+          console.log(user)
+          updateSignIn(false)
         }
-      });
+      })
+      .catch(err => {
+        console.log(err);
+        setFailedToFetch(true);
+      })
   };
-
   return (
     <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
         <div className="measure">
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
             <legend className="f1 fw6 ph0 mh0">Sign In</legend>
+            {incorrectSignIn ? <p>'incorrect user or password!'</p> : ''}
+            {failedtofetch ? <p>failed to fetch data, try again later!</p> : ''}
             <div className="mt3">
               <label className="db fw6 lh-copy f6" htmlFor="email-address">
                 Email
@@ -73,7 +85,11 @@ const SignIn = ({ onRouteChange, loadUser }) => {
           </div>
           <div className="lh-copy mt3">
             <p
-              onClick={() => onRouteChange("register")}
+              onClick={() => {
+                onRouteChange("register");
+                setFailedToFetch(false);
+                updateSignIn(true);
+              }}
               href="#0"
               className="f6 link dim black db pointer"
             >

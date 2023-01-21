@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Register = ({ onRouteChange, loadUser }) => {
+const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
   const [registername, setRegisterName] = useState("");
   const [registeremail, setRegisterEmail] = useState("");
   const [registerpassword, setRegisterPassword] = useState("");
@@ -21,8 +21,10 @@ const Register = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitRegister = () => {
-    return registername && registeremail && registerpassword
-      ? fetch("http://localhost:3000/register", {
+    updateSignIn(true)
+    //validation
+    return registername && registeremail && registerpassword // conditional to check if required fields are filled
+      ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -33,12 +35,12 @@ const Register = ({ onRouteChange, loadUser }) => {
         })
           .then((res) => res.json())
           .then((user) => {
-            if (user) {
-              loadUser(user);
-              onRouteChange("home");
+            if (user.id) {
+              loadUser(user); //pass userdata to props to render in home
+              onRouteChange("home"); //send route to home
             }
           })
-      : null;
+      : null; //else null
   };
 
   return (
