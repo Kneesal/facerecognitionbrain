@@ -22,6 +22,7 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
 
   const onSubmitRegister = () => {
     updateSignIn(true)
+    //validation
     return registername && registeremail && registerpassword // conditional to check if required fields are filled
       ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
           method: "post",
@@ -34,7 +35,7 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
         })
           .then((res) => res.json())
           .then((user) => {
-            if (user) {
+            if (user.id) {
               loadUser(user); //pass userdata to props to render in home
               onRouteChange("home"); //send route to home
             }

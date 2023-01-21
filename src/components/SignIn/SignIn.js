@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const SignIn = ({ onRouteChange, loadUser, incorrectSignIn, updateSignIn}) => {
   const [signinemail, setSignInEmail] = useState("");
   const [signinpassword, setSignInPassword] = useState("");
+  const [failedtofetch, setFailedToFetch] = useState(false);
 
   const onEmailChange = (event) => {
     event.preventDefault();
@@ -25,15 +26,20 @@ const SignIn = ({ onRouteChange, loadUser, incorrectSignIn, updateSignIn}) => {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        if (data.id) {
-          loadUser(data);
+      .then((user) => {
+        if (user.id) {
+          loadUser(user);
           onRouteChange("home");
+          setFailedToFetch(false)
         } 
         else {
-          console.log(data)
+          console.log(user)
           updateSignIn(false)
         }
+      })
+      .catch(err => {
+        console.log(err);
+        setFailedToFetch(true);
       })
   };
   return (
@@ -42,7 +48,8 @@ const SignIn = ({ onRouteChange, loadUser, incorrectSignIn, updateSignIn}) => {
         <div className="measure">
           <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
             <legend className="f1 fw6 ph0 mh0">Sign In</legend>
-            <p>{incorrectSignIn ? 'incorrect user or password!' : ''}</p>
+            {incorrectSignIn ? <p>'incorrect user or password!'</p> : ''}
+            {failedtofetch ? <p>failed to fetch data, try again later!</p> : ''}
             <div className="mt3">
               <label className="db fw6 lh-copy f6" htmlFor="email-address">
                 Email
@@ -78,7 +85,11 @@ const SignIn = ({ onRouteChange, loadUser, incorrectSignIn, updateSignIn}) => {
           </div>
           <div className="lh-copy mt3">
             <p
-              onClick={() => onRouteChange("register")}
+              onClick={() => {
+                onRouteChange("register");
+                setFailedToFetch(false);
+                updateSignIn(true);
+              }}
               href="#0"
               className="f6 link dim black db pointer"
             >
