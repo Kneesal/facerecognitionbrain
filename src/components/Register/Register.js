@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
+const Register = ({
+  onRouteChange,
+  loadUser,
+  updateSignIn,
+  isLoading,
+  handleIsLoading,
+}) => {
   const [registername, setRegisterName] = useState("");
   const [registeremail, setRegisterEmail] = useState("");
   const [registerpassword, setRegisterPassword] = useState("");
@@ -21,10 +27,12 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
   };
 
   const onSubmitRegister = () => {
-    updateSignIn(true)
+    updateSignIn(true);
+    handleIsLoading(true);
     //validation
     return registername && registeremail && registerpassword // conditional to check if required fields are filled
-      ? fetch("http://localhost:3000/register", { //if = true, then fetch API, post user data
+      ? fetch("https://facedetect-api.onrender.com/register", {
+          //if = true, then fetch API, post user data
           method: "post",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -38,6 +46,7 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
             if (user.id) {
               loadUser(user); //pass userdata to props to render in home
               onRouteChange("home"); //send route to home
+              handleIsLoading(false);
             }
           })
       : null; //else null
@@ -91,7 +100,8 @@ const Register = ({ onRouteChange, loadUser, updateSignIn }) => {
               onClick={onSubmitRegister}
               className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
-              value="Register"
+              value={isLoading ? "Loading..." : "Register"}
+              disabled = {isLoading ? true  : false }
             />
           </div>
         </div>
