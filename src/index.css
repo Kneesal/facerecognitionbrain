@@ -8,9 +8,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(309deg, #00DBDE 0%, #FC00FF 100%);
+  background: #56CCF2;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #2F80ED, #56CCF2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #2F80ED, #56CCF2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   font-family: 'Courier New', Courier, monospace;
-
   /* position: absolute; */
   width: 100%;
   min-height: 100%;

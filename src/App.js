@@ -26,7 +26,12 @@ class App extends React.Component {
         joined: "",
       },
       incorrectSignIn: false,
+      isLoading: false
     };
+  }
+
+  handleIsLoading = (loading) => {
+    loading === true ? this.setState({isLoading: true}) : this.setState({isLoading: false})
   }
 
   updateSignIn = (signin) => {
@@ -77,8 +82,8 @@ class App extends React.Component {
   };
 
   onPictureSubmit = () => {
-    this.setState({ imageUrl: this.state.input });
-          fetch("http://localhost:3000/image", {
+    this.setState({ imageUrl: this.state.input, boxData: [] });
+          fetch("https://facedetect-api.onrender.com/image", {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -135,12 +140,16 @@ class App extends React.Component {
             loadUser={this.loadUser}
             incorrectSignIn={this.state.incorrectSignIn}
             updateSignIn={this.updateSignIn}
+            isLoading={this.state.isLoading}
+            handleIsLoading={this.handleIsLoading}
           />
         ) : (
           <Register
             onRouteChange={this.onRouteChange}
             loadUser={this.loadUser}
             updateSignIn={this.updateSignIn}
+            isLoading={this.state.isLoading}
+            handleIsLoading={this.handleIsLoading}
           />
         )}
       </div>
